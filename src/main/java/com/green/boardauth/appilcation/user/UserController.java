@@ -2,6 +2,7 @@ package com.green.boardauth.appilcation.user;
 
 
 import com.green.boardauth.appilcation.user.model.UserSignInReq;
+import com.green.boardauth.appilcation.user.model.UserSignInRes;
 import com.green.boardauth.appilcation.user.model.UserSignUpReq;
 import com.green.boardauth.configuration.model.ResultResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,14 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResultResponse<Integer> sinIn(@RequestBody UserSignInReq req){
+    public ResultResponse<?> sinIn(@RequestBody UserSignInReq req){
         log.info("req2: {}", req);
-        int result = userService.signIn(req);
-        return new ResultResponse<>(result == 1 ? "로그인 성공": "로그인 실패",result );
+        UserSignInRes userSignInRes = userService.signIn(req);
+        // 보안 쿠키 처리
+        if(userSignInRes !=null ){
+
+        }
+        return new ResultResponse<>(userSignInRes == null ? "로그인 실패": "로그인 성공",userSignInRes );
     }
 
 }
