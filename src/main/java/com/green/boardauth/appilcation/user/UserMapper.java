@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
+
     int signUp(UserSignUpReq req);
 
     UserGetOneRes findByUid(String uid);
