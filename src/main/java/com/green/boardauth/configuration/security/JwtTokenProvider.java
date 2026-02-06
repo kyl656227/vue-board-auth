@@ -4,6 +4,7 @@ package com.green.boardauth.configuration.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.green.boardauth.configuration.constants.ConstJwt;
 import com.green.boardauth.configuration.model.JwtUser;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -50,7 +51,7 @@ public class JwtTokenProvider {
                 .issuer(constJwt.getIssuer())
                 .issuedAt( now ) //JWT만든 일시 (토큰 생성일)
                 .expiration( new Date(now.getTime() + tokenValidityMilliSeconds)) //JWT종료 일시(토큰 만료 일시)
-                .claim(constJwt.getClaimKey(),makeClaimByUserToJson(jwtUser))
+                .claim(constJwt.getClaimKey(),makeClaimByUserToJson(jwtUser))//signedUser 키값으로 JwtUser 객체를 json으로 변환해서 담음
 
                 .signWith(secretKey) //signature
                 .compact();
@@ -60,4 +61,25 @@ public class JwtTokenProvider {
             return objectMapper.writeValueAsString(jwtUser); // 객체 -> JSON 문자열로 변환
 
     }
+
+    public JwtUser getJwtUserFromToken(String token){
+        Claims claims = getClaims(token);
+
+        //signeduser 키값으로 담겨져 있는 string 타입으로 리턴
+        String json = claims.get(constJwt.getClaimKey(), String.class);
+
+        //JSON > Object, json문자열을 JwtUser 객체로 변환
+        return objectMapper.readValue(json, JwtUser.class);
+
+    }
+
+    private Claims getClaims(String token){
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+
 }
