@@ -1,16 +1,19 @@
 package com.green.boardauth.appilcation.board;
 
 
+import com.green.boardauth.appilcation.board.model.BoardGetMaxPageReq;
+import com.green.boardauth.appilcation.board.model.BoardGetRes;
 import com.green.boardauth.appilcation.board.model.BoardPostReq;
+import com.green.boardauth.appilcation.board.model.BoardGetReq;
 import com.green.boardauth.configuration.model.ResultResponse;
 import com.green.boardauth.configuration.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.swing.plaf.PanelUI;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -32,5 +35,22 @@ public class BoardController {
         String message = result == 1 ? "등록 성공" : "등록 실패";
         return new ResultResponse<>(message, result);
     }
+
+    @GetMapping
+    public ResultResponse<?> getBoardList(@ModelAttribute BoardGetReq req){
+        log.info("req: {}", req);
+        List<BoardGetRes> list = boardService.getBoardList(req);
+
+        return new ResultResponse<>(String.format("%d rows", list.size()), list);
+    }
+
+
+    @GetMapping("max_page")
+    public ResultResponse<?> getBoardMaxPage(@ModelAttribute BoardGetMaxPageReq req) {
+        log.info("req: {}", req);
+        int maxPage = boardService.getBoardMaxPage(req);
+        return new ResultResponse<>( String.format("maxPage: %d", maxPage), maxPage );
+    }
+
 }
 

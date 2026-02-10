@@ -4,13 +4,36 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.boardauth.appilcation.board.BoardMapper">
 
-<insert id="getpost">
+<insert id="save">
     INSERT INTO board
     SET user_id = #{userId},
         title = #{title},
         contents = #{contents}
 </insert>
 
+    <select id="findAll">
+        SELECT b.id, b.title, b.created_at, u.nm
+        FROM board b
+        JOIN user u
+        ON u.id = b.user_id
+        <if test="searchText != null and searchText = '' ">
+            WHERE b.title LIKE '%${searchText}%'
+                OR b.contents LIKE '%${searchText}%'
+        </if>
+        ORDER BY b.id DESC
+        LIMIT #{startIdx} , #{size}
+    </select>
+
+    <select id="findMaxPage">
+        SELECT ceil(COUNT(1) / #{size}) FROM board
+        <if test=" searchText != null and searchText != '' ">
+            WHERE title LIKE '%${searchText}%'
+            OR contents LIKE '%${searchText}%'
+        </if>
+    </select>
+
+
+    
 
 
 
