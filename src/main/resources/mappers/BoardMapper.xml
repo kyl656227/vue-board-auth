@@ -16,7 +16,7 @@
         FROM board b
         JOIN user u
         ON u.id = b.user_id
-        <if test="searchText != null and searchText = '' ">
+        <if test="searchText != null and searchText != '' "> <!--null이 아니거나 공백이 아니거나-->
             WHERE b.title LIKE '%${searchText}%'
                 OR b.contents LIKE '%${searchText}%'
         </if>
