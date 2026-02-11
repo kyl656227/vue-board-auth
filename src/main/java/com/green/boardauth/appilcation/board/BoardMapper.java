@@ -1,9 +1,6 @@
 package com.green.boardauth.appilcation.board;
 
-import com.green.boardauth.appilcation.board.model.BoardGetMaxPageReq;
-import com.green.boardauth.appilcation.board.model.BoardGetReq;
-import com.green.boardauth.appilcation.board.model.BoardGetRes;
-import com.green.boardauth.appilcation.board.model.BoardPostReq;
+import com.green.boardauth.appilcation.board.model.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,4 +15,13 @@ public interface BoardMapper {
     List<BoardGetRes> findAll(BoardGetReq req);
 
     int findMaxPage(BoardGetMaxPageReq req);
+
+
+    BoardDetailReq findContents(long id);
+
+
+
+    int update(BoardPutReq req);
+
+    int deleteById(BoardDelReq req);
 }

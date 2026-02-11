@@ -1,10 +1,7 @@
 package com.green.boardauth.appilcation.board;
 
 
-import com.green.boardauth.appilcation.board.model.BoardGetMaxPageReq;
-import com.green.boardauth.appilcation.board.model.BoardGetRes;
-import com.green.boardauth.appilcation.board.model.BoardPostReq;
-import com.green.boardauth.appilcation.board.model.BoardGetReq;
+import com.green.boardauth.appilcation.board.model.*;
 import com.green.boardauth.configuration.model.ResultResponse;
 import com.green.boardauth.configuration.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +28,9 @@ public class BoardController {
         log.info("signedUserId: {}", userPrincipal.getSignedUserId());
         log.info("req: {}", req);
         req.setUserId(userPrincipal.getSignedUserId());
-        int result = boardService.postBoard(req);
-        String message = result == 1 ? "등록 성공" : "등록 실패";
-        return new ResultResponse<>(message, result);
+        long id = boardService.postBoard(req);
+        String message = id > 0 ? "등록 성공" : "등록 실패";
+        return new ResultResponse<>(message, id);
     }
 
     @GetMapping
@@ -51,6 +48,31 @@ public class BoardController {
         int maxPage = boardService.getBoardMaxPage(req);
         return new ResultResponse<>( String.format("maxPage: %d", maxPage), maxPage );
     }
+
+    @GetMapping("{id}")
+    public ResultResponse<?> getBoard(@PathVariable long id) {
+        log.info("id: {}", id);
+        BoardDetailReq res = boardService.getBoardContents(id);
+        return new ResultResponse<>( "조회 성공", res );
+    }
+
+
+    @DeleteMapping
+    public ResultResponse<?> delBoard(@AuthenticationPrincipal UserPrincipal userPrincipal
+            , @ModelAttribute BoardDelReq req) {
+        req.setSignedUserId( userPrincipal.getSignedUserId() ); //로그인한 사용자의 id값 담기
+        log.info("req: {}", req);
+        int result = boardService.delBoard(req);
+        return new ResultResponse<>( result == 1 ? "삭제 성공" : "삭제 권한이 없습니다.", result );
+    }
+
+    @PutMapping
+    public int putBoard(@RequestBody BoardPutReq req){
+        log.info("수정 req: {}", req);
+        return boardService.putBoard(req);
+    }
+
+
 
 }
 
