@@ -1,6 +1,7 @@
 package com.green.boardauth.appilcation.board;
 
 import com.green.boardauth.appilcation.board.model.*;
+import com.green.boardauth.configuration.model.ResultResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -19,9 +20,9 @@ public interface BoardMapper {
 
     BoardDetailReq findContents(long id);
 
-
-
     int update(BoardPutReq req);
 
     int deleteById(BoardDelReq req);
+
+    List<String> searchText(GetTextRes res);
 }

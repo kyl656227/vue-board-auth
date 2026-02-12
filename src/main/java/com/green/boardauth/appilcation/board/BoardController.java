@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.plaf.PanelUI;
 import java.util.List;
 
 @Slf4j
@@ -70,6 +69,12 @@ public class BoardController {
     public int putBoard(@RequestBody BoardPutReq req){
         log.info("수정 req: {}", req);
         return boardService.putBoard(req);
+    }
+
+    @GetMapping("related_search")
+    public ResultResponse<?> gettext(@RequestParam(name = "search_text") GetTextRes res ){
+        List<String> list = boardService.search(res);
+        return new ResultResponse<>("ee", list );
     }
 
 

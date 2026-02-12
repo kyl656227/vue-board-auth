@@ -36,7 +36,7 @@ public class UserController {
             JwtUser jwtUser = new JwtUser( userSignInRes.getSignedUserId());
             jwtTokenManager.issue(res,jwtUser);
         }
-        return new ResultResponse<>(userSignInRes == null ? "로그인 실패": "로그인 성공",userSignInRes );
+        return new ResultResponse<>(userSignInRes == null ? "아이디/비밀번호를 확인해 주세요" : "로그인 성공",userSignInRes );
     }
 
     @PostMapping("/signout")

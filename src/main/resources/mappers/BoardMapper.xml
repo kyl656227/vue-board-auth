@@ -55,6 +55,13 @@
         WHERE id = #{id}
     </update>
 
+    <select id="searchText">
+        SELECT distinct title
+        FROM board
+        WHERE title LIKE CONCAT(#{searchText}, '%')
+        LIMIT 10
+    </select>
+
     
 
 

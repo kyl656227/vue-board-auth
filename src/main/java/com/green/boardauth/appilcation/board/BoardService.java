@@ -2,6 +2,7 @@ package com.green.boardauth.appilcation.board;
 
 
 import com.green.boardauth.appilcation.board.model.*;
+import com.green.boardauth.configuration.model.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,4 +40,10 @@ public class BoardService {
     public int putBoard(BoardPutReq req){
         return boardMapper.update(req);
     }
+
+    public List<String> search(GetTextRes res) {
+        return boardMapper.searchText(res);
+    }
+
+
 }
